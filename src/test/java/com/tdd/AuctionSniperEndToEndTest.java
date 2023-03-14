@@ -1,11 +1,13 @@
 package com.tdd;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 // TODO: build end-to-end test infrastructure
 public class AuctionSniperEndToEndTest {
-    private final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
-    private final ApplicationRunner application = new ApplicationRunner();
+    private final FakeAuctionServer auction = new FakeAuctionServer("item-54321"); 
+    private final ApplicationRunner application = new ApplicationRunner(); // class for manipulating UI code
 
     @Test
     public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
@@ -14,5 +16,16 @@ public class AuctionSniperEndToEndTest {
         auction.hasReceivedJoinRequestFromSniper(); // Step 3
         auction.announceClosed(); // Step 4
         application.showsSniperHasLostAuction(); // Step 5
+    }
+
+    // Additional cleanup
+    @AfterEach
+    public void stopAuction() {
+        auction.stop();
+    }
+
+    @AfterEach
+    public void stopApplication() {
+        application.stop();
     }
 }
