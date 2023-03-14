@@ -1,1 +1,1 @@
-The purpose of this repository is to record my experience while following Steve Freeman's and Nat Pryce's book "Growing Object-Oriented Software Guided by Tests". You can find more information about the book [http://www.growing-object-oriented-software.com](here).
+The purpose of this repository is to record my experience while following Steve Freeman's and Nat Pryce's book "Growing Object-Oriented Software Guided by Tests". You can find more information about the book [here](http://www.growing-object-oriented-software.com).
