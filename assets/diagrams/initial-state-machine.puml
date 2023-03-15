@@ -1,0 +1,12 @@
+@startuml
+[*] --> Joining
+
+Joining -> Lost : auction closed
+Lost --> [*]
+Joining -> Bidding : receive price
+Bidding -> Bidding : price > bid
+Bidding -> Winning : price <= bid
+Winning -> Winning : price <= bid
+Winning -> Won : auction closed
+Won --> [*]
+@enduml
