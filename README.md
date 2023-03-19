@@ -2,6 +2,7 @@ The purpose of this repository is to record my experience while following Steve 
 
 
 ## Setup of the test infrastructure
+___
 
 In order to make the unit tests pass, we first need to create an environment for them to be able to run. And, in order to set the environment for the unit tests to execute, we need to first devise the end-to-end test infrastructure, which, although requires a significant effort, will benefit the project's development in a incremental and iterative way.
 
@@ -32,3 +33,34 @@ The first "end-to-end" slice will be just the use case when the Sniper will conn
 ![first-test](assets/diagrams/joining-lost.png)
 
 The test we have added `sniperJoinsAuctionUntilAuctionCloses()` isn't really and end-to-end, because it doesn't use the real auction server. Our strategy is to first use the Stub Auction server, make the tests pass, and afterwards use the real environment. 
+
+
+### Building the test rig
+___
+The authors' intent is to setup an infrastructure, that will start up the OpenFire server and create accounts for the Sniper and the auction at the start of each test run. Each test will start instances of the application and the fake auction, and then test their communication through the server. At first, the server will be run on the same host as the application and client. Later on, as the infrastructure stabilizes, we can consider running different components on different machines, which will be a better match to the real deployment.
+
+### Server Setup
+
+Setting Up the Openfire Server
+At the time of writing, I am using version 4.7.4 of Openfire. For these end-to-end tests, we set up our local server with three user accounts and passwords:
+sniper
+sniper
+auction-item-54321
+auction
+auction-item-65432
+auction
+
+Note that the server doesn't come bundled with JRE/JDK and it requires it to run. In my case, I experienced issues on my macbook Air M2 running on macOS Ventura 13.2.1 right after the installation. The system preference OpenFire pane produces an error after being bootstrapped. In the end I had to do the following steps, so that I could start the OpenFire server locally from the terminal:
+
+1. Locate the openfire installation on my system - in my case it is: `/usr/local/openfire`
+2. Set write and execute permissions on the /bin and /conf directories by running:
+`sudo chmod -R 755 /usr/local/openfire/*`
+3. Overwrite the **JAVA_HOME** variable in the `/bin/openfire.sh` file (on my system I'm using sdkman to manage multiple java versions, so for running the server, I overwrote the script with the following value):
+`JAVA_HOME=/path/to/user/root/.sdkman/candidates/java/8.0.362-zulu/zulu-8.jdk/Contents/Home`
+4. Execute (with admin priviledge) the `openfire.sh` script from the bin directory:
+`sudo ./openfire.sh`. In my case, running without sudo, doesn't set the home directory and the server cannot start as a consequence.
+5. The terminal logs should show something similar to below:
+`Openfire 4.7.4 [Mar 19, 2023 11:36:05 PM]
+Admin console listening at http://daniels-air:9090
+Successfully loaded plugin 'admin'.
+` 
