@@ -47,6 +47,38 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- WindowLicker dependencies -->
+    <!-- https://mvnrepository.com/artifact/com.googlecode.windowlicker/windowlicker-core -->
+    <dependency>
+        <groupId>com.googlecode.windowlicker</groupId>
+        <artifactId>windowlicker-core</artifactId>
+        <version>r268</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.googlecode.windowlicker/windowlicker-swing -->
+    <dependency>
+        <groupId>com.googlecode.windowlicker</groupId>
+        <artifactId>windowlicker-swing</artifactId>
+        <version>r268</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.googlecode.windowlicker/windowlicker-web -->
+    <dependency>
+        <groupId>com.googlecode.windowlicker</groupId>
+        <artifactId>windowlicker-web</artifactId>
+        <version>r268</version>
+    </dependency>
+   <!-- https://mvnrepository.com/artifact/org.igniterealtime.smack/smack -->
+  <dependency>
+      <groupId>org.igniterealtime.smack</groupId>
+      <artifactId>smack</artifactId>
+      <version>3.2.1</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
+  <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+  </dependency>
   </dependencies>
   <build>
     <plugins>

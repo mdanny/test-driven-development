@@ -1,10 +1,8 @@
 package com.tdd;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-// TODO: build end-to-end test infrastructure
 public class AuctionSniperEndToEndTest {
     private final FakeAuctionServer auction = new FakeAuctionServer("item-54321"); 
     private final ApplicationRunner application = new ApplicationRunner(); // class for manipulating UI code
