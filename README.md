@@ -42,13 +42,6 @@ The authors' intent is to setup an infrastructure, that will start up the OpenFi
 ### Server Setup
 
 Setting Up the Openfire Server
-At the time of writing, I am using version 4.7.4 of Openfire. For these end-to-end tests, we set up our local server with three user accounts and passwords:
-sniper
-sniper
-auction-item-54321
-auction
-auction-item-65432
-auction
 
 Note that the server doesn't come bundled with JRE/JDK and it requires it to run. In my case, I experienced issues on my macbook Air M2 running on macOS Ventura 13.2.1 right after the installation. The system preference OpenFire pane produces an error after being bootstrapped. In the end I had to do the following steps, so that I could start the OpenFire server locally from the terminal:
 
@@ -64,3 +57,17 @@ Note that the server doesn't come bundled with JRE/JDK and it requires it to run
 Admin console listening at http://daniels-air:9090
 Successfully loaded plugin 'admin'.
 ` 
+
+At the time of writing, I am using version 4.7.4 of Openfire. For these end-to-end tests, we set up our local server with three user accounts and passwords (provided you login to the admin console on the host:port combination listed in the logs):
+sniper
+sniper
+auction-item-54321
+auction
+auction-item-65432
+auction
+
+In addition to the users setup, we set the openfire server to not store offline messages, because we don't have any persistent state. To do that, navigate to Server Settings > Offline Message Policy > Drop. Also, we set the resource policy to "Never kick", which will not allow a new resource to log in if there's a conflict. For that, navigate to Server Settings > Resource Policy > Never Kick.
+
+Finally, we set up an instance of Openfire on our local host that hosts the XMPP broker. The Sniper and fake auction in our end-to-end tests, even though they’re running in the same process, will communicate through this server. We also set up logins to match the small number of item identifiers that we’ll be using in our tests. 
+
+Now we're ready to run our first failing tests.
