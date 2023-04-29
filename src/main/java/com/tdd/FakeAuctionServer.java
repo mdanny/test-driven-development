@@ -29,7 +29,7 @@ public class FakeAuctionServer {
     }
 
     public void startSellingItem() throws XMPPException {
-        connection.connect();;
+        connection.connect();
         connection.login(String.format(ITEM_ID_AS_LOGIN, itemId),
         AUCTION_PASSWORD, AUCTION_RESOURCE);
         connection.getChatManager().addChatListener(

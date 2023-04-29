@@ -3,7 +3,7 @@ package com.tdd;
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
-    public static final String XMPP_HOSTNAME = "openfire-server";
+    public static final String XMPP_HOSTNAME = "localhost";
     private AuctionSniperDriver driver;
 
     public void startBiddingIn(final FakeAuctionServer auction) {
