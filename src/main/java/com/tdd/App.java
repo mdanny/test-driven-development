@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-import org.hamcrest.text.X;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -23,6 +22,8 @@ public final class App {
         startUserInterface();
     }
 
+    @SuppressWarnings("unused") private Chat notToBeGCd;
+
     private MainWindow ui;
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
@@ -33,37 +34,14 @@ public final class App {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    public static String SNIPER_STATUS_NAME = "SNIPER STATUS";
-    public static String STATUS_JOINING = "JOINING";
-    public static String STATUS_LOST = "LOST";
-
     /**
      * Says hello to the world.
      * @param args The arguments of the program.
      */
     public static void main(String... args) throws Exception {
         App app = new App();
-        System.out.println("Running Application...");
-        XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
-        Chat chat = connection.getChatManager().createChat(auctionId(args[ARG_ITEM_ID], connection),
-        new MessageListener() {
-            public void processMessage(Chat aChat, Message message) {
-                // nothing yet
-            }
-        });
-        chat.sendMessage(new Message());
-    }
-
-    private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {
-        XMPPConnection connection = new XMPPConnection(hostname);
-        connection.connect();
-        connection.login(username, password, AUCTION_RESOURCE);
-
-        return connection;
-    }
-
-    private static String auctionId(String itemId, XMPPConnection connection) {
-        return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
+        app.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]), args[ARG_ITEM_ID]);
+        
     }
 
     private void startUserInterface() throws Exception {
@@ -74,8 +52,37 @@ public final class App {
         });
     }
 
+    private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {
+        XMPPConnection connection = new XMPPConnection(hostname);
+        connection.connect();
+        connection.login(username, password, AUCTION_RESOURCE);
+
+        return connection;
+    }
+
+    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+    final Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection),
+    new MessageListener() {
+        public void processMessage(Chat aChat, Message message) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    ui.showStatus(MainWindow.STATUS_LOST);
+                }
+            });
+        }
+    });
+    this.notToBeGCd = chat;
+    chat.sendMessage(new Message());
+    }
+    private static String auctionId(String itemId, XMPPConnection connection) {
+        return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
+    }
+
     public class MainWindow extends JFrame {
+        static final String SNIPER_STATUS_NAME = "SNIPER STATUS";
         static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
+        static final String STATUS_LOST = "LOST";
+        static final String STATUS_JOINING = "JOINING";
         final JLabel sniperStatusLabel = createLabel(STATUS_JOINING);
         public MainWindow() {
             super("Auction Sniper");
@@ -91,6 +98,10 @@ public final class App {
             result.setName(SNIPER_STATUS_NAME);
             result.setBorder(new LineBorder(Color.BLACK));
             return result;
+        }
+
+        public void showStatus(String status) {
+            sniperStatusLabel.setText(status);
         }
     }
 }

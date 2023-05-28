@@ -1,5 +1,7 @@
 package com.tdd;
 
+import com.tdd.App.MainWindow;
+
 /*
  *  An ApplicationRunner is an object that wraps up all management and communicating with the Swing application
  *  we’re building. It runs the application as if from the command line, obtaining and holding a reference to its
@@ -24,11 +26,11 @@ public class ApplicationRunner {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(App.STATUS_JOINING);
+        driver.showsSniperStatus(MainWindow.STATUS_JOINING);
     }
     
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(App.STATUS_LOST);
+        driver.showsSniperStatus(MainWindow.STATUS_LOST);
     }
     
     public void stop() {
